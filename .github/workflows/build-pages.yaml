@@ -1,0 +1,64 @@
+---
+name: Build and Push to Pages
+
+on:
+  # push:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      pages: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4.1.7
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@v27
+        with:
+          nix_path: nixpkgs=channel:nixos-unstable
+
+      - name: Build Nix package
+        run: nix-build
+
+      - name: Export Nix store paths
+        run: |
+          mkdir -p cache
+          nix-store --query --requisites ./result
+          nix-store --export $(nix-store --query --requisites ./result) >cache/cache.nar
+
+      - name: Create nix-cache-info file
+        run: |
+          cat <<EOF | tee cache/nix-cache-info
+          StoreDir: /nix/store
+          WantMassQuery: 1
+          Priority: 30
+          EOF
+
+      - name: Create .narinfo file
+        run: |
+          STORE_PATH=$(nix-store --query ./result)
+          cat <<EOF | tee cache/${STORE_PATH##*/}.narinfo
+          StorePath: ${STORE_PATH}
+          URL: nar/${STORE_PATH##*/}.nar
+          Compression: none
+          NarHash: $(nix-hash --flat --type sha256 cache/cache.nar)
+          NarSize: $(stat -c%s cache/cache.nar)
+          References: $(nix-store --query --references  ./result | cut -d "/" -f4)
+          Deriver: $(nix path-info --derivation ./result | cut -d "/" -f4)
+          EOF
+          mkdir -p cache/nar
+          cp cache/cache.nar cache/nar/${STORE_PATH##*/}.nar
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5.0.0
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3.0.1
+        with:
+          path: ./cache
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4.0.5
