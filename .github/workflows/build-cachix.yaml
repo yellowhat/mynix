@@ -3,6 +3,7 @@ name: Build and Push to Cachix
 
 on:
   push:
+  workflow_dispatch:
 
 jobs:
   build:
