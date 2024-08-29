@@ -4,7 +4,10 @@ name: Build and Push to Cachix
 on:
   push:
   workflow_dispatch:
-
+  # Ensure derivation does not make mynix cache stale  
+  schedule:
+    - cron: "0 2 * * *"  # UTC
+ 
 jobs:
   build:
     runs-on: ubuntu-latest
