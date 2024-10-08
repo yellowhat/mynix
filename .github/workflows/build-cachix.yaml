@@ -18,7 +18,7 @@ jobs:
           - kubernetes
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4.2.0
+        uses: actions/checkout@v4.2.1
 
       - name: Install Nix
         uses: cachix/install-nix-action@v30
