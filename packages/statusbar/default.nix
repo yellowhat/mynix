@@ -24,6 +24,11 @@ rustPlatform.buildRustPackage rec {
     openssl
   ];
 
+  checkFlags = [
+    # Not sure why but in GitHub CI does not work
+    "--skip=network::network_test::test_get_ip"
+  ];
+
   meta = {
     description = "A custom statusbar, written in rust, to be used with swaybar";
     homepage = "https://gitlab.com/yellowhat-labs/statusbar";
