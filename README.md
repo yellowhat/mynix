@@ -7,8 +7,10 @@
 make it
 # Enable flakes
 echo "experimental-features = nix-command flakes" >>/etc/nix/nix.conf
-# Build package
+# Build only package
 nix build .#my-go
+# Build and run package
+nix run .#my-go
 ```
 
 ## Update
