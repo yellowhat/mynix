@@ -4,18 +4,19 @@ name: Build and Push to Cachix
 on:
   push:
   workflow_dispatch:
-  # Ensure derivation does not make mynix cache stale  
+  # Ensure derivation does not make mynix cache stale
   schedule:
     - cron: "0 2 * * *"  # UTC
- 
+
 jobs:
   build:
     runs-on: ubuntu-latest
     strategy:
       matrix:
         package:
-          - my-go
           - kubernetes
+          - my-go
+          - statusbar
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4.2.2
