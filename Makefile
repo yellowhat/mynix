@@ -2,15 +2,16 @@
 SHELL          = /usr/bin/env bash -o pipefail
 .SHELLFLAGS    = -ec
 
-.PHONY: it
-it: ## Start interactive nix container
+.PHONY: start
+start: ## Start interactive nix container
 	podman run \
 		--interactive \
 		--tty \
 		--rm \
 		--volume "${PWD}:/data:z" \
 		--workdir /data \
-		docker.io/nixos/nix:latest
+		--entrypoint bash \
+		docker.io/nixos/nix:latest -c "echo 'experimental-features = nix-command flakes' | tee -a /etc/nix/nix.conf && bash"
 
 .PHONY: help
 help: ## Makefile Help Page
