@@ -4,9 +4,7 @@
 
 ```bash
 # Start interactive nix container
-make it
-# Enable flakes
-echo "experimental-features = nix-command flakes" >>/etc/nix/nix.conf
+make start
 # Build only package
 nix build .#my-go
 # Build and run package
