@@ -16,6 +16,7 @@
       {
         packages.kubernetes = pkgs.callPackage ./packages/kubernetes { };
         packages.my-go = pkgs.callPackage ./packages/my-go { };
+        packages.sf = pkgs.callPackage ./packages/sf { };
         packages.statusbar = pkgs.callPackage ./packages/statusbar { };
       }
     );
