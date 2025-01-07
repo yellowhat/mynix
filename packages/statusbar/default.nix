@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "statusbar";
-  version = "v1.3.4";
+  version = "v1.3.5";
 
   src = fetchFromGitLab {
     owner = "yellowhat-labs";
     repo = pname;
     rev = version;
-    hash = "sha256-DXEH4BC5bJ8mlM7Oszo/NQMj4nu4SVLVp0CuW0jTCq0=";
+    hash = "sha256-YLLqZjyd1OppyEFqT5o5qtBPB8o+I1wkMEaQDOfhXs4=";
   };
 
-  cargoHash = "sha256-xHkTHLQcJtvaVynfjZ7dHvIv6Inwl7noeEl8J4tKJcU=";
+  cargoHash = "sha256-hpB+VvzlLz//w5F5NBo1S1ccElKCiRgxFqP7j/Uy2n4=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
