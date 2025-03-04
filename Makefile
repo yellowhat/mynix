@@ -2,8 +2,8 @@
 SHELL          = /usr/bin/env bash -o pipefail
 .SHELLFLAGS    = -ec
 
-.PHONY: start
-start: ## Start interactive nix container
+.PHONY: env
+env: ## Start interactive nix container
 	podman run \
 		--interactive \
 		--tty \
