@@ -4,7 +4,7 @@
 
 ```bash
 # Start interactive nix container
-make start
+make env
 # Build only package
 nix build .#my-go
 # Build and run package
