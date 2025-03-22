@@ -7,7 +7,6 @@
   rsync,
   installShellFiles,
   runtimeShell,
-  kubectl,
   nixosTests,
 
   components ? [
@@ -17,6 +16,9 @@
     # "cmd/kube-controller-manager"
     # "cmd/kube-proxy"
     # "cmd/kube-scheduler"
+    # Include kubectl
+    "cmd/kubectl"
+    "cmd/kubectl-convert"
   ]
 }:
 
@@ -75,10 +77,7 @@ buildGoModule rec {
     cc build/pause/linux/pause.c -o pause
     install -D pause -t $pause/bin
 
-    rm docs/man/man1/kubectl*
     installManPage docs/man/man1/*.[1-9]
-
-    ln -s ${kubectl}/bin/kubectl $out/bin/kubectl
 
     # Unfortunately, kube-addons-main.sh only looks for the lib file in either the
     # current working dir or in /opt. We have to patch this for now.
@@ -92,7 +91,14 @@ buildGoModule rec {
 
     installShellCompletion --cmd kubeadm \
       --bash <($out/bin/kubeadm completion bash) \
+      --fish <($out/bin/kubectl completion fish) \
       --zsh <($out/bin/kubeadm completion zsh)
+
+    installShellCompletion --cmd kubectl \
+      --bash <($out/bin/kubectl completion bash) \
+      --fish <($out/bin/kubectl completion fish) \
+      --zsh <($out/bin/kubectl completion zsh)
+
     runHook postInstall
   '';
 
@@ -104,7 +110,5 @@ buildGoModule rec {
     platforms = platforms.linux;
   };
 
-  passthru.tests = nixosTests.kubernetes // {
-    inherit kubectl;
-  };
+  passthru.tests = nixosTests.kubernetes;
 }
