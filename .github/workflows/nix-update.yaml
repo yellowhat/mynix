@@ -22,7 +22,7 @@ jobs:
           nix_path: nixpkgs=channel:nixos-unstable
 
       - name: Install nix-update
-        uses: yaxitech/nix-install-pkgs-action@v5
+        uses: yaxitech/nix-install-pkgs-action@v6
         with:
           packages: "nix-update"
           inputs-from: nixpkgs
