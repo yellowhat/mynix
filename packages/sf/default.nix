@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sf";
-  version = "v1.0.2";
+  version = "v1.0.3";
 
   src = fetchFromGitLab {
     owner = "yellowhat-labs";
     repo = pname;
     rev = version;
-    hash = "sha256-whdbS3eoDH/2/ZoytlC6MK5lc7zozM17wKGsDTkGHxo=";
+    hash = "sha256-2ZN+fyiFKeoqr7/kn63Mo6NdzuYhuFD0AKaDiNenVds=";
   };
 
   buildInputs = [ pkgs.python3 ];
