@@ -8,12 +8,12 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "statusbar";
-  version = "v1.3.8";
+  version = "1.3.8";
 
   src = fetchFromGitLab {
     owner = "yellowhat-labs";
     repo = pname;
-    rev = version;
+    rev = "v${version}";
     hash = "sha256-sxf45yiy7eQRW9TS7/7wf32t+ClEcfcj7gpuTbXl9Hg=";
   };
 

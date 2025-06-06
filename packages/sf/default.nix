@@ -7,12 +7,12 @@
 
 stdenv.mkDerivation rec {
   pname = "sf";
-  version = "v1.0.3";
+  version = "1.0.3";
 
   src = fetchFromGitLab {
     owner = "yellowhat-labs";
     repo = pname;
-    rev = version;
+    rev = "v${version}";
     hash = "sha256-2ZN+fyiFKeoqr7/kn63Mo6NdzuYhuFD0AKaDiNenVds=";
   };
 
