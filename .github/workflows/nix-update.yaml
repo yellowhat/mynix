@@ -11,6 +11,8 @@ jobs:
     permissions:
       actions: write
       contents: write
+      # Also Settings > Actions > General
+      # [x] Allow GitHub Actions to create and approve pull requests
       pull-requests: write
     strategy:
       matrix:
