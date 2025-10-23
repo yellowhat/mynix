@@ -18,6 +18,6 @@ index 849973470d1..e4fef30eaea 100755
 -  exit 1
 -fi
 +source "@out@/bin/kube-addons-lib.sh"
-
+ 
  # The business logic for whether a given object should be created
  # was already enforced by salt, and /etc/kubernetes/addons is the

@@ -10,6 +10,7 @@
   nixosTests,
 
   components ? [
+    "cmd/kubeadm"
     "cmd/kubelet"
     # Do not build, as they will run in a container, reduce size 420 > 130 MB
     # "cmd/kube-apiserver"
@@ -22,14 +23,14 @@
   ]
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kubernetes";
   version = "1.34.1";
 
   src = fetchFromGitHub {
     owner = "kubernetes";
     repo = "kubernetes";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-18AMfS2OnInTmdr5fLwtuKaeyGQSiAtk29BjuHl6qQA=";
   };
 
@@ -52,12 +53,7 @@ buildGoModule rec {
 
   patches = [ ./fixup-addonmanager-lib-path.patch ];
 
-  WHAT = lib.concatStringsSep " " (
-    [
-      "cmd/kubeadm"
-    ]
-    ++ components
-  );
+  WHAT = lib.concatStringsSep " " components;
 
   buildPhase = ''
     runHook preBuild
@@ -77,6 +73,7 @@ buildGoModule rec {
     cc build/pause/linux/pause.c -o pause
     install -D pause -t $pause/bin
 
+    rm docs/man/man1/kubectl*
     installManPage docs/man/man1/*.[1-9]
 
     # Unfortunately, kube-addons-main.sh only looks for the lib file in either the
@@ -91,24 +88,17 @@ buildGoModule rec {
 
     installShellCompletion --cmd kubeadm \
       --bash <($out/bin/kubeadm completion bash) \
-      --fish <($out/bin/kubectl completion fish) \
       --zsh <($out/bin/kubeadm completion zsh)
-
-    installShellCompletion --cmd kubectl \
-      --bash <($out/bin/kubectl completion bash) \
-      --fish <($out/bin/kubectl completion fish) \
-      --zsh <($out/bin/kubectl completion zsh)
-
     runHook postInstall
   '';
 
-  meta = with lib; {
-    description = "Production-Grade Container Scheduling and Management";
-    license = licenses.asl20;
-    homepage = "https://kubernetes.io";
-    maintainers = with maintainers; [ ] ++ teams.kubernetes.members;
-    platforms = platforms.linux;
-  };
-
   passthru.tests = nixosTests.kubernetes;
-}
+
+  meta = {
+    description = "Production-Grade Container Scheduling and Management";
+    license = lib.licenses.asl20;
+    homepage = "https://kubernetes.io";
+    teams = [ lib.teams.kubernetes ];
+    platforms = lib.platforms.linux;
+  };
+})
